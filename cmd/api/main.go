@@ -25,5 +25,8 @@ func main() {
 
 	log.Println("API server running on :8080")
 
-	http.ListenAndServe(":8080", r)
+	err := http.ListenAndServe(":8080", r)
+	if err != nil {
+		return
+	}
 }

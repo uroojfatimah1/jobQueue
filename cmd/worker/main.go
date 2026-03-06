@@ -31,7 +31,7 @@ func main() {
 
 func processJob(jobService *service.JobService, rdb *redis.Client) {
 
-	// Wait for a job from queue
+	// Wait for a job from the queue
 	jobIds, err := rdb.BLPop(ctx, 0, "jobs:queue").Result()
 	if err != nil {
 		log.Println("Failed to pop from queue:", err)
@@ -57,7 +57,7 @@ func processJob(jobService *service.JobService, rdb *redis.Client) {
 	rdb.HSet(ctx, key, "status", "processing", "updatedAt", time.Now().Format(time.RFC3339))
 	log.Println("Processing job:", jobId, "Type:", job.Type, "Payload:", job.Payload)
 
-	// Simulate execution duration based on job type
+	// Simulate execution duration based on a job type
 	duration := jobDuration(job.Type)
 	time.Sleep(duration)
 
@@ -76,7 +76,7 @@ func processJob(jobService *service.JobService, rdb *redis.Client) {
 			rdb.RPush(ctx, "jobs:queue", jobId)
 			log.Println("Job re-queued for retry:", jobId)
 		} else {
-			// Move to failed queue after 3 attempts
+			// Move to the failed queue after 3 attempts
 			rdb.RPush(ctx, "jobs:failed", jobId)
 			log.Println("Job moved to failed queue:", jobId)
 		}

@@ -13,7 +13,6 @@ type JobHandler struct {
 	Service *service.JobService
 }
 
-// Constructor
 func NewJobHandler(service *service.JobService) *JobHandler {
 	return &JobHandler{Service: service}
 }
